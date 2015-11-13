@@ -63,3 +63,7 @@ Both the source and target path should be a `file://` absolute URL. If using `fi
 The `success` method receives the `targetThumbnailPath` in case the method needs to do further work on the image. The `error` method often receives the `targetThumbnailPath` on iOS, but will receive an error message indicating cause of failure on Android. 
 
 The thumbnail obtained is platform and video-specific. There is no support for requesting thumbnails of different sizes; if you need this, you can alter the thumbnail after it is written out to storage.
+
+## Android Quirks
+
+Source paths of the form `content://` are converted to the corresponding `/storage/...` file path.
