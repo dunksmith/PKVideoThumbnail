@@ -52,7 +52,13 @@ public class PKVideoThumbnail extends CordovaPlugin {
                 String sourceVideo = args.getString(0);
                 String targetImage = args.getString(1);
                 
-                Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail ( sourceVideo.substring(7), MediaStore.Images.Thumbnails.MINI_KIND);
+                // Both the source and target path should be a file:// absolute URL. If using file://localhost/,
+                // you should eliminate localhost from the targetThumbnailPath for proper functionality.
+                Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail ( sourceVideoPath.substring(7), MediaStore.Images.Thumbnails.MINI_KIND);
+                if (thumbnail == null) {
+                    callbackContext.error("Video format not supported, or source path not file://...");
+                    return true;
+                }
                 
                 FileOutputStream theOutputStream;
                 try
@@ -95,6 +101,12 @@ public class PKVideoThumbnail extends CordovaPlugin {
         } catch (JSONException e) {
             callbackContext.error ( "JSON Exception" );
             return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            callbackContext.error("Unexpected error (" + e.getMessage() + ')');
+            return true; 
         }
     }
 }
